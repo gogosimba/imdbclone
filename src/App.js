@@ -1,39 +1,57 @@
-import MovieList from './components/MovieList';
-import { useState, useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import MovieListHeading from './components/MovieListHeading';
-import SearchBox from './components/SearchBox';
-
+import { useEffect, useState } from 'react';
+import { HashRouter, Route, Routes } from 'react-router-dom';
+import Home from './Home';
+import MoviePage from './components/MoviePage';
 function App() {
-  const api_key = '543c678703dca231327be65e93f95770';
-  const [searchValue, setSearchValue] = useState('');
-  const [movies, setMovies] = useState([]);
-  const url = `https://api.themoviedb.org/3/search/movie?api_key=${api_key}&language=en-US&query=${searchValue}&page=1&include_adult=false`;
-  const getMovieRequest = async () => {
+  const [data, setData] = useState([]);
+
+  const [searchValue, setSearchValue] = useState('a');
+  const [movie, setMovie] = useState([]);
+  const [latestView, setLatest] = useState([]);
+
+  const placeMovie = (index) => {
+    let dataRecently = latestView;
+    dataRecently.push(data[index]);
+    setLatest(dataRecently);
+    setMovie(data[index]);
+    console.log(latestView);
+  };
+
+  const getDataReq = async () => {
+    const api_key = `543c678703dca231327be65e93f95770`;
+    const url = `https://api.themoviedb.org/3/search/movie?api_key=${api_key}&query=${searchValue}`;
     const response = await fetch(url);
     const responseJson = await response.json();
     if (responseJson.results) {
-      setMovies(responseJson.results);
+      setData(responseJson.results);
     }
-    console.log(responseJson);
   };
-
   useEffect(() => {
-    getMovieRequest();
+    getDataReq(searchValue);
   }, [searchValue]);
 
   return (
-    <div className='container-fluid movie-app'>
-      <div className='row'>
-        <MovieListHeading heading='Movies' />
-        <SearchBox searchValue={searchValue} setSearchValue={setSearchValue} />
-      </div>
-      <div className='row d-flex align-items-center mt-4 mb-4'>
-        <MovieList movies={movies} />
-      </div>
+    <div className='App'>
+      <HashRouter>
+        <Routes>
+          <Route
+            exact
+            path='/'
+            element={
+              <Home
+                searchValue={searchValue}
+                data={data}
+                setSearchValue={setSearchValue}
+                placeMovie={placeMovie}
+                latestView={latestView}
+              />
+            }
+          />
+          <Route path='/MoviePage' element={<MoviePage movie={movie} />} />
+        </Routes>
+      </HashRouter>
     </div>
   );
 }
-
 export default App;
