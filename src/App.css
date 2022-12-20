@@ -3,14 +3,25 @@ body {
   color: #ffffff;
 }
 
-.block {
+/* .block {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+} */
+
+.movie_row {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
 }
 img {
   width: 300px;
+  height: 300px;
+}
+.card-text {
+  font-size: large;
+  white-space: normal !important;
 }
 .inline-view {
   display: flex;

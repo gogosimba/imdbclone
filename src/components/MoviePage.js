@@ -4,15 +4,15 @@ function MoviePage(props) {
     <div>
       <div className='card-single'>
         <div>
-          <img
+          {/* <img
             className='image-single'
             src={'https://image.tmdb.org/t/p/w500' + props.movie.backdrop_path}
             alt={props.movie.path}
-          />
-          <div class='card-title'>
+          /> */}
+          {/* <div class='card-title'>
             <h1 class='font-weight-bold'>{props.movie.title}</h1>
-          </div>
-          <h3 class='card-text'>{props.movie.overview}</h3>
+          </div> */}
+          <p class='card-text'>{props.movie.overview}</p>
           <h5 class='font-weight-light'>
             Language: {props.movie.original_language}
           </h5>
