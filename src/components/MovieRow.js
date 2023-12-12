@@ -1,1 +1,0 @@
-import Movie from "./Movie";
