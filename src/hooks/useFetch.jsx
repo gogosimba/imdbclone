@@ -22,7 +22,7 @@ const useFetch = (url) => {
     };
 
     fetchData();
-  }, [url]); // Include 'url' as a dependency to handle changes in the URL.
+  }, [url]);
 
   return { data, error, isLoading };
 };

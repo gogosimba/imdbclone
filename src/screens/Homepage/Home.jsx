@@ -1,38 +1,62 @@
-// Home.jsx
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import './_Home.scss';
-import MovieCard from '../../components/MovieCard';
 import MovieCarousel from '../../components/MovieCarousel';
 import SearchBar from '../../components/SearchBar';
 import useFetch from '../../hooks/useFetch';
+
 const api_key = `543c678703dca231327be65e93f95770`;
 
 const Home = () => {
-  const { data, error, isLoading } = useFetch(
-    `https://api.themoviedb.org/3/movie/popular?api_key=${api_key}&language=en-US&page=1`
-  );
+  const popularMoviesUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${api_key}&language=en-US&page=1`;
+
+  const {
+    data: popularMovies,
+    error: popularMoviesError,
+    isLoading: popularMoviesLoading,
+  } = useFetch(popularMoviesUrl);
 
   const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
 
   const handleSearch = async (query) => {
     try {
-      const url = `https://api.themoviedb.org/3/search/movie?api_key=${api_key}&language=en-US&page=1&query=${query}&include_adult=false`;
-      const response = await fetch(url);
-      const result = await response.json();
+      setSearchLoading(true);
 
-      // Update state with search results
-      setSearchResults(result.results);
+      const searchMoviesUrl = `https://api.themoviedb.org/3/search/movie?api_key=${api_key}&language=en-US&page=1&query=${query}&include_adult=false`;
+      const searchMoviesResponse = await fetch(searchMoviesUrl);
+      const searchMoviesResult = await searchMoviesResponse.json();
+      const results = searchMoviesResult.results;
+
+      const moviesWithCredits = results
+        .filter((movie) => movie.poster_path)
+        .map(async (movie) => {
+          const creditsUrl = `https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${api_key}&language=en-US`;
+          const creditsResponse = await fetch(creditsUrl);
+          const creditsResult = await creditsResponse.json();
+          return { ...movie, credits: creditsResult.cast };
+        });
+
+      const moviesData = await Promise.all(moviesWithCredits);
+
+      setSearchResults(moviesData);
     } catch (error) {
       console.error('Error searching movies:', error);
+    } finally {
+      setSearchLoading(false);
     }
   };
 
-  if (isLoading) {
-    return <h1>Loading...</h1>;
+  useEffect(() => {
+    handleSearch('');
+  }, []); 
+
+  if (popularMoviesLoading) {
+    return <h1>Loading popular movies...</h1>;
   }
 
-  if (error) {
-    return <h1>{error}</h1>;
+  if (popularMoviesError) {
+    return <h1>{popularMoviesError}</h1>;
   }
 
   return (
@@ -43,10 +67,15 @@ const Home = () => {
       </header>
       <main>
         <h2>Popular Movies</h2>
-        {/* Display search results if available, otherwise show popular movies */}
-        <MovieCarousel
-          movies={searchResults.length > 0 ? searchResults : data.results}
-        />
+        {searchLoading ? (
+          <p>Loading search results...</p>
+        ) : (
+          <MovieCarousel
+            movies={
+              searchResults.length > 0 ? searchResults : popularMovies.results
+            }
+          />
+        )}
       </main>
       <footer>
         <p>© 2023 IMDb Clone by Jonathan Johansson. All rights reserved.</p>

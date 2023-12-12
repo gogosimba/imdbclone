@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import './_SearchBar.scss';
 
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
@@ -8,7 +7,6 @@ const SearchBar = ({ onSearch }) => {
   const handleInputChange = (event) => {
     const newQuery = event.target.value;
     setQuery(newQuery);
-    // Trigger the search function when the input value changes
     onSearch(newQuery);
   };
 
