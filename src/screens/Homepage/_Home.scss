@@ -1,8 +1,70 @@
-*{
-    
+* {
+
     box-sizing: border-box;
+    background-color: black;
+    color: white;
+
+}
+
+.home-page {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 4%;
     background-color: black;
     color: white;
 }
 
+.movieCarousel {
 
+    justify-content: center;
+    align-items: center;
+
+    padding: 4%;
+    background-color: black;
+    color: white;
+
+    .carousel-control-next-icon,
+    .carousel-control-prev-icon {
+        height: 50px;
+        /* adjust as needed */
+        width: 50px;
+        padding: 10px;
+
+    }
+}
+
+.movieCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 4%;
+    background-color: black;
+    color: white;
+
+    .card {
+        background-color: black;
+        color: white;
+        border: 1px solid white;
+        margin: 2%;
+        width: 18rem;
+
+        .card-body {
+            background-color: black;
+            color: white;
+
+            .card-title {
+                background-color: black;
+                color: white;
+            }
+
+            .card-text {
+                background-color: black;
+                color: white;
+            }
+        }
+    }
+}

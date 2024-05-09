@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import './_Home.scss';
 import MovieCarousel from '../../components/MovieCarousel';
@@ -9,12 +8,19 @@ const api_key = `543c678703dca231327be65e93f95770`;
 
 const Home = () => {
   const popularMoviesUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${api_key}&language=en-US&page=1`;
+  const topRatedMoviesUrl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${api_key}&language=en-US&page=1`;
 
   const {
     data: popularMovies,
     error: popularMoviesError,
     isLoading: popularMoviesLoading,
   } = useFetch(popularMoviesUrl);
+
+  const {
+    data: topRatedMovies,
+    error: topRatedMoviesError,
+    isLoading: topRatedMoviesLoading,
+  } = useFetch(topRatedMoviesUrl);
 
   const [searchResults, setSearchResults] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -49,7 +55,7 @@ const Home = () => {
 
   useEffect(() => {
     handleSearch('');
-  }, []); 
+  }, []);
 
   if (popularMoviesLoading) {
     return <h1>Loading popular movies...</h1>;
@@ -73,6 +79,17 @@ const Home = () => {
           <MovieCarousel
             movies={
               searchResults.length > 0 ? searchResults : popularMovies.results
+            }
+          />
+        )}
+
+        <h2>Top Rated Movies</h2>
+        {searchLoading ? (
+          <p>Loading search results...</p>
+        ) : (
+          <MovieCarousel
+            movies={
+              searchResults.length > 0 ? searchResults : topRatedMovies.results
             }
           />
         )}

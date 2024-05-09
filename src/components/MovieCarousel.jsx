@@ -12,7 +12,7 @@ function MovieCarousel({ movies }) {
   }
 
   return (
-    <Carousel nextLabel='' prevLabel=''>
+    <Carousel nextLabel='' prevLabel='' className='movieCarousel'>
       {chunkedMovies.map((moviesChunk, index) => (
         <Carousel.Item key={index}>
           <div className='d-flex'>

@@ -11,7 +11,7 @@ function MovieCard({ movie }) {
 
   return (
     <>
-      <Card style={{ border: 'none' }} onClick={handleCardClick}>
+      <Card style={{ border: 'none' }} onClick={handleCardClick} className='movieCard'>
         <Card.Img
           variant='top'
           src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
